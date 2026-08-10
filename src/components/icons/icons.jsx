@@ -1,5 +1,4 @@
-// Brand icons lucide-react doesn't ship (it's generic-icons only).
-// Kept in one file so page/card components don't have to show raw <svg> markup.
+
 
 export function GithubIcon({ size = 15 }) {
   return (
