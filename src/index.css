@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: 242 234 221;
+  --color-surface: 237 227 210;
+  --color-text: 26 26 46;
+  --color-muted: 90 87 82;
+  --color-accent: 234 88 12;
+  --color-border: 222 211 191;
+}
+
+.dark {
+  --color-bg: 17 17 17;
+  --color-surface: 28 28 28;
+  --color-text: 235 235 235;
+  --color-muted: 160 160 160;
+  --color-accent: 251 146 60;
+  --color-border: 45 45 45;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-bg text-text;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}

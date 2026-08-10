@@ -1,0 +1,105 @@
+export const meta = {
+  title: "JSON Web Tokens",
+  date: "July 27 2026",
+  description:
+    "A short walkthrough of JSON Web Tokens",
+  tags: ["JWT", "Authentication", "Web"],
+};
+
+Authentication is part of nearly most modern websites that deal with personal information. Whenever
+you log into a website like youtube or a social media site, the application will need a method of
+remembering who you are and verifying who you say you are. A common way of handling authentication
+is by using JSON Web Tokens (JWTs).
+
+## What is a JSON Web Token?
+
+A JSON Web Token is a open standard for transferring information between parties (for example client and server)
+as a JSON object. While JWTs has other purposes, authentication is what I'll be focusing on in the blog.
+
+## Structure of a JWT
+
+A JSON Web Token consists of three parts: the header, the payload, and the signature.
+
+### 1. Header
+
+The header describes the token itself and commonly contains the type of token and the algorithm used to sign it.
+In the example, HS256 means the token uses an HMAC SHA-256 (hashing algorithm) signature.
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+### 2. Payload
+
+The payload contains the claims carried by the token, such as user ID, token expiration times, and token issued times.
+
+```json
+{
+  "sub": "42", //subject of token, usually user's ID
+  "iat": 1785142800, //time token was issued
+  "exp": 1785143700  // time token expires
+}
+```
+
+### 3. Signature
+
+The signature ensures the integrity of the token. When the server creates the token, it signs both the header and the payload
+using a secret key. Later, when the token returns, the server performs the verification process again and ensures that the
+token hasn't been tampered with.
+
+## Example JWT authentication flow
+
+<img src="/blog/jwt.png"
+alt="jwt flow"
+className="rounded-lg " />
+
+Let's walk through what's happening in the diagram above.
+
+1. The user logs in. The client then sends a username and password to the server, usually over an HTTPS request to a login endpoint.
+2. Server authenticates the user. The server checks the submitted credentials against what's stored in its database (checking if email exists, verifying hashed password, etc.).
+3. Server issues a JWT. Once the credentials check out, the server builds a token containing the claims like
+   user ID and expiration time. The server then signs it with a secret key and sends it to the client.
+4. Client stores the JWT. The client hangs onto the token so it can prove its identity on future requests,
+   typically in an HttpOnly cookie.
+5. Client sends the JWT with requests. Whenever the client hits a protected route, it attaches the token.
+6. Server verifies the JWT. The server recomputes the signature using its secret key and compares it against the signature on the token. If they match, the token hasn't been tampered with.
+
+   JWTs are "stateless". The server doesn't have to remember anything about the session, the token carries the proof with it.
+
+7. Server sends a response. If the token checks out, the server processes the request and returns the data. If not, it rejects the request, usually with a 401 Status code.
+
+## Where to store JWTs
+
+When the server creates a JWT, the client needs to store the token somewhere so it can be sent to the server on future requests.
+JWTs can be stored in 'localStorage' or 'sessionStorage', but this method is susceptible to XSS (cross-site scripting) attacks.
+
+A safer alternative is to use 'HttpOnly' cookies and unlike the previous storage methods, HttpOnly cookies cannot be read directly
+by client-side Javascript. HttpOnly cookies reduce the risk of token theft through JavaScript, although the application
+still needs protection against attacks such as CSRF.
+
+## Access tokens and refresh tokens
+
+An access token is a short-lived token used to access protected routes.
+
+A refresh token lasts longer and is used to request a new access token after the previous one expires.
+
+The basic flow is:
+
+1. The user logs in.
+2. The server returns an access token and a refresh token.
+3. The access token is used for protected requests.
+4. When it expires, the refresh token requests a new one.
+5. Logging out removes the refresh token.
+
+## JWTs vs. sessions
+
+Other than JWTs, session-based authentication is another approach to consider. With sessions, the server is the
+application that does the remembering. When a user logs in, the server creates a record in the database containing
+information such as session ID, the user it belongs to, when it expires, IP address, and other data. This session
+is then sent to the client as a cookie. On every request after, the client will send the session ID back and the database will confirm if it's valid.
+
+One of the benefits to this approach is that since the server holds the record, actions like logging a user out is
+instant, since all it takes is deleting a row in the database.

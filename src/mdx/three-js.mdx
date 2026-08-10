@@ -1,0 +1,206 @@
+export const meta = {
+  title: "Three.js is cool",
+  date: "Jul 22 2026",
+  description:
+    "Brief intro of three.js, cool things i've seen built with it, and my own project using three.js.",
+  tags: ["Three.js", "3D"],
+};
+
+If you keep up with any web design showcase site like Awwwards, you've
+probably seen a ton of new and emerging sites using 3D technology on the
+web. On Figma's "Top Web Design Trends for 2026," 3D and immersive elements
+are listed as the first trend among new websites.
+
+## Three.js (and WebGL)
+
+**WebGL** (Web Graphics Library) is a JavaScript API that can
+run 2D and 3D graphics in most modern browsers. If you wanted to display
+something a simple cube in WebGL directly, you'd need
+to write shaders to help place the points of the shape and draw the pixels
+on screen, manually define the shape's vertices, connect
+them into triangles, tell the browser how to render everything properly, and much more. In other words,
+even showing one simple 3D object can require a lot of setup, and can be difficult to work with when creating a more complex project.
+
+**Three.js** is a JavaScript library built on
+top of WebGL that makes working with 3D graphics much easier. Instead of
+writing every low-level instruction yourself, Three.js gives you tools for
+creating objects, cameras, lights, materials, textures, animations, and
+entire 3D scenes.
+
+## A basic scene with Three.js
+
+If you already have experience with web development foundations like HTML, CSS,
+and JavaScript, the basics of Three.js are fairly easy to pick up. With just
+a few lines of code to set up a scene, create a mesh, add lights, camera, and a renderer, you already
+have enough to add 3D objects on the screen. Heres a small
+snippet of three.js code you can skim through to see a simple rendering of a 3D cube.
+
+```js
+import * as THREE from "three";
+
+// Grab the canvas that Three.js will render into
+const canvas = document.querySelector("canvas.webgl");
+
+// The scene holds all of our 3D objects, lights, cameras, etc.
+const scene = new THREE.Scene();
+
+// Create a green cube
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshStandardMaterial({
+  color: "green",
+});
+
+// A mesh combines geometry (the shape) with a material (its appearance)
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// Add a light so the MeshStandardMaterial is visible
+const light = new THREE.DirectionalLight("white", 3);
+light.position.set(2, 2, 3);
+scene.add(light);
+
+// Add some softer light to the entire scene
+const ambientLight = new THREE.AmbientLight("white", 0.5);
+scene.add(ambientLight);
+
+// Create a perspective camera
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  100
+);
+
+// Move the camera backwards so we can see the cube
+camera.position.z = 3;
+scene.add(camera);
+
+// Tilt the cube on two axes so we can see its 3D edges better
+cube.rotation.x = Math.PI / 6; // 30 degrees
+cube.rotation.y = Math.PI / 4; // 45 degrees
+
+// The renderer draws the scene onto our canvas using WebGL
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: true,
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Keep things sized correctly if the window is resized
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+// Render the scene
+renderer.render(scene, camera);
+
+```
+
+And here is our rendered cube:
+
+<img
+src="/blog/cube.png"
+alt="cube example"
+className="rounded-lg "
+/>
+
+## Cool websites made with Three.js
+
+### Creative portfolios
+
+Some of the most creative and memorable portfolio websites I've seen use
+Three.js, and here are some of my favorites:
+
+- Bruno Simon's RC car portfolio.
+- Henry Heffernan's office room desktop.
+- Bryant Smith's sketchbook-like portfolio.
+- Blink Industries production studio.
+
+<img
+src="/blog/portfolios1.png"
+alt="portfolio examples 1"
+className="rounded-lg "
+/>
+<img
+src="/blog/portfolios2.png"
+alt="portfolio examples 2"
+className="rounded-lg "
+/>
+
+### Marketing and brand experiences
+
+Brands are also beginning to experiment with 3D, from museum-like
+experiences such as Cartier's _Watches & Wonders 2025_, to minimalistic
+product showcases like Stereoscope Coffee's landing page.
+
+<img
+src="/blog/stereoscope.gif"
+alt="Stereoscope Coffee's 3D landing page animation"
+className="rounded-lg w-full"
+/>
+
+### More Applications
+
+There are a ton of other applications of Three.js as well. For example:
+
+- Games
+- WebXR, AR, and VR
+- Storytelling and interactive articles
+- Data visualization
+- Virtual Spaces
+
+The official Three.js examples page displays highlighted projects and tons of demos.
+Awwwards is another great place to browse for inspiration and see how
+creative developers use 3D in real websites.
+
+## Blender
+
+**Blender** is a free, open-source 3D modeling and animation tool that pairs well
+with Three.js. Instead of building geometry piece by piece in code, you can model, texture,
+rig, and animate an entire scene visually in Blender, then export it as a file that
+Three.js can load directly. This makes it possible to create much more stylized scenes and
+detailed objects.
+
+Here's my portfolio scene that I built with Blender:
+
+<img
+src="/blog/blender.png"
+alt="Blender scene"
+className="rounded-lg "
+/>
+
+Heres how it looks rendered with three.js:
+
+<img
+src="/projects/project2.jpg"
+alt="Three.js scene"
+className="rounded-lg "
+/>
+
+## Resources
+
+Three.js Journey is widely regarded as the best paid course for learning
+Three.js. With a working computer and basic JavaScript knowledge, the
+course starts from the fundamentals of Three.js like cameras, lights, materials, textures, then goes onto more advanced topics like shaders,
+physics, and also the basics of Blender. For people already experienced with React,
+it also teaches R3F (React Three Fiber), which lets developers build with
+Three.js using React components.
+
+For free resources, the official Three.js site has a manual with
+getting-started, basics, and fundamentals sections. There's also an
+official examples page, which showcases tons of Three.js demos you can
+view live in 3D, with links to the actual source code. I'd recommend
+scrolling through a bunch of examples that look interesting, just to get
+familiar with recognizing different techniques.
+
+Andrew Woan's YouTube channel is also good for learning how a full three.js project comes together,
+and also commonly uses and teaches Blender.
+
+AI is another tool worth leveraging. Even Mr. Doob, the creator of
+Three.js, now codes with AI,
+and pushes new updates and features to Three.js with its
+help.
