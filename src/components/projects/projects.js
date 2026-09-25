@@ -23,4 +23,15 @@ export const projects = [
     featured: true,
     source: "https://github.com/sfyatee/likeag6",
   },
+  {
+    slug: "timestampgen",
+    title: "TimestampGen",
+    description:
+      "An AI tool that turns any YouTube video into clickable timestamps. Built with Next.js and the Claude API to read transcripts and generate chapter outlines.",
+    image: "/projects/project3.png",
+    tech: ["Next.js", "TypeScript", "PostgreSQL", "Drizzle", "Claude API"],
+    featured: false,
+    live: "https://timestamp-dusky.vercel.app/",
+    source: "https://github.com/andyshin00/timestamp",
+  },
 ];
